@@ -93,7 +93,14 @@ mf.effect.Border = class extends mf.Effect {
                 return (undefined === this.m_type) ? 'border' : 'border-' + this.m_type;
             }
             /* setter */
-            if ( ('top' !== prm) && ('bottom' !== prm) && ('left' !== prm) && ('right' !== prm) ) {
+            if ( ('top'    !== prm)   &&
+                 ('bottom' !== prm)   &&
+                 ('left'   !== prm)   &&
+                 ('right'  !== prm)   &&
+                 ('top-left'     !== prm) &&
+                 ('top-rigth'    !== prm) && 
+                 ('bottom-left'  !== prm) && 
+                 ('bottom-right' !== prm) ) {
                 throw new Error('invalid parameter');
             }
             this.m_type = prm;
@@ -122,6 +129,7 @@ mf.effect.Border = class extends mf.Effect {
             throw e;
         }
     }
+    
 }
 module.exports = mf.effect.Border;
 /* end of file */
