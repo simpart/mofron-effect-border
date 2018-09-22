@@ -21,27 +21,17 @@ mf.effect.Border = class extends mf.Effect {
         }
     }
     
-    enable (tgt) {
-        try { this.execonts(tgt, true); } catch (e) {
-            console.error(e.stack);
-            throw e;
-        }
-    }
+    enable () {}
+    disable () {}
     
-    disable () {
-        try { this.execonts(tgt, false); } catch (e) {
-            console.error(e.stack);
-            throw e;
-        }
-    }
-    
-    execonts (tgt, flg) {
+    contents (flg, cmp) {
         try {
+            super.contents(flg, cmp);
             let set_style = {};
             set_style[this.type() + '-width'] = (true === flg) ? this.width() : null;
             set_style[this.type() + '-style'] = (true === flg) ? this.style() : null;
-            set_style[this.type() + '-color'] = (true === flg) ? this.color().getStyle() : null;
-            tgt.style(set_style);
+            set_style[this.type() + '-color'] = (true === flg) ? this.color().toString() : null;
+            cmp.style(set_style);
         } catch (e) {
             console.error(e.stack);
             throw e;
@@ -52,11 +42,10 @@ mf.effect.Border = class extends mf.Effect {
         try {
             if (undefined === prm) {
                 /* getter */
-                return (undefined === this.m_width) ? '0.01rem' : this.m_width;
+                return (undefined === this.m_width) ? '0.01rem' : this.m_width.toString();
             }
             /* setter */
-            mf.func.getSizeObj(prm);
-            this.m_width = prm;
+            this.m_width = mf.func.getSize(prm);
             if (true === this.status()) {
                 this.execute(true);
             }
@@ -114,13 +103,10 @@ mf.effect.Border = class extends mf.Effect {
         try {
             if (undefined === prm) {
                 /* getter */
-                return (undefined === this.m_color) ? new mf.Color(0,0,0) : this.m_color;
+                return (undefined === this.m_color) ? new mf.Color(0,0,0).toString() : this.m_color.toString();
             }
             /* setter */
-            if (true !== mf.func.isInclude(prm, 'Color')) {
-                throw new Error('invalid parameter');
-            }
-            this.m_color = prm;
+            this.m_color = mf.func.getColor(prm);
             if (true === this.status()) {
                 this.execute(true);
             }
