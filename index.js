@@ -9,12 +9,12 @@ const mf = require('mofron');
  */
 mf.effect.Border = class extends mf.Effect {
     
-    constructor (po) {
+    constructor (po, p2) {
         try {
             super();
             this.name('Border');
             this.prmMap(['width', 'color']);
-            this.prmOpt(po);
+            this.prmOpt(po, p2);
         } catch (e) {
             console.error(e.stack);
             throw e;
@@ -36,9 +36,9 @@ mf.effect.Border = class extends mf.Effect {
         try {
             super.contents(flg, cmp);
             let set_style = {};
-            set_style[this.type() + '-width'] = (true === flg) ? mf.func.getSize(this.width()).toString() : null;
-            set_style[this.type() + '-style'] = (true === flg) ? this.style() : null;
-            set_style[this.type() + '-color'] = (true === flg) ? this.color().toString() : null;
+            set_style[this.type() + 'width'] = (true === flg) ? mf.func.getSize(this.width()).toString() : null;
+            set_style[this.type() + 'style'] = (true === flg) ? this.style() : null;
+            set_style[this.type() + 'color'] = (true === flg) ? this.color().toString() : null;
             cmp.style(set_style);
         } catch (e) {
             console.error(e.stack);
@@ -104,14 +104,14 @@ mf.effect.Border = class extends mf.Effect {
                 'type',
                 ['all', 'top', 'bottom', 'left', 'right', 'top-left', 'top-right', 'bottom-left', 'bottom-right'],
                 prm,
-                ''
+                'all'
             );
             if ( (undefined !== prm)       &&
                  (true === this.isExecd()) && 
                  (true === this.status()) ) {
                 this.execute(true);
             } else if (undefined !== ret) {
-                return ('all' === ret) ? 'border' : 'border-' + ret;
+                return ('all' === ret) ? 'border-' : 'border-' + ret + '-';
             }
         } catch (e) {
             console.error(e.stack);
