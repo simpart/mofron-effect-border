@@ -14,6 +14,7 @@ mf.effect.Border = class extends mf.Effect {
             super();
             this.name('Border');
             this.prmMap(['width', 'color']);
+            this.suspend(false, true);
             this.prmOpt(po, p2);
         } catch (e) {
             console.error(e.stack);
