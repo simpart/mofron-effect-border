@@ -15,6 +15,11 @@ mf.effect.Border = class extends mf.Effect {
             this.name('Border');
             this.prmMap(['width', 'color']);
             this.suspend(false, true);
+            
+            this.width('0.01rem', '0rem');
+            this.style('solid', null);
+            this.color([90,90,90], null);
+            
             this.prmOpt(po, p2);
         } catch (e) {
             console.error(e.stack);
@@ -22,25 +27,26 @@ mf.effect.Border = class extends mf.Effect {
         }
     }
     
-    enable () {}
-    disable () {}
-    
-    /**
-     * set/delete border config
-     * 
-     * @param flg (boolean) true : set border config
-     * @param flg (boolean) false : delete border config
-     * @param cmp (Component) mofron Component object
-     * @note private method
-     */
-    contents (flg, cmp) {
+    enable (tgt) {
         try {
-            super.contents(flg, cmp);
             let set_style = {};
-            set_style[this.type() + 'width'] = (true === flg) ? mf.func.getSize(this.width()).toString() : null;
-            set_style[this.type() + 'style'] = (true === flg) ? this.style() : null;
-            set_style[this.type() + 'color'] = (true === flg) ? this.color().toString() : null;
-            cmp.style(set_style);
+            set_style[this.type() + 'width'] = (null === this.width()[0]) ? null : this.width()[0].toString();
+            set_style[this.type() + 'style'] = (null === this.style()[0]) ? null : this.style()[0];
+            set_style[this.type() + 'color'] = (null === this.color()[0]) ? null : this.color()[0].toString();
+            tgt.style(set_style);
+        } catch (e) {
+            console.error(e.stack);
+            throw e;
+        }
+    }
+    
+    disable (tgt) {
+        try {
+            let set_style = {};
+            set_style[this.type() + 'width'] = (null === this.width()[1]) ? null : this.width()[1].toString();
+            set_style[this.type() + 'style'] = (null === this.style()[1]) ? null : this.style()[1];
+            set_style[this.type() + 'color'] = (null === this.color()[1]) ? null : this.color()[1].toString();
+            tgt.style(set_style);
         } catch (e) {
             console.error(e.stack);
             throw e;
@@ -54,15 +60,15 @@ mf.effect.Border = class extends mf.Effect {
      * @param val (undefined) call as getter
      * @return (string) css value of border width
      */
-    width (val) {
+    width (prm, dis) {
         try {
-            let ret = this.member('width', 'string', val, '0.01rem');
-            if ( (undefined !== val)       &&
-                 (true === this.isExecd()) &&
-                 (true === this.status()) ) {
-                this.execute(true);
+            if (undefined !== prm) {
+                prm = mf.func.getSize(prm).toString();
             }
-            return ret;
+            if (undefined !== dis) {
+                dis = mf.func.getSize(dis).toString();
+            }
+            return this.execConfig('width', prm, dis);
         } catch (e) {
             console.error(e.stack);
             throw e;
@@ -76,15 +82,19 @@ mf.effect.Border = class extends mf.Effect {
      * @param val (undefined) call as getter
      * @return (string) css value of border style
      */
-    style (prm) {
+    style (prm, dis) {
         try {
-            let ret = this.member('style', 'string', prm, 'solid');
-            if ( (undefined !== prm)       && 
-                 (true === this.isExecd()) &&
-                 (true === this.status()) ) {
-                this.execute(true);
+            if ( (undefined !== prm) &&
+                 (null !== prm)      &&
+                 ('string' !== typeof prm) ) {
+                throw new Error('invalid parameter');
             }
-            return ret;
+            if ( (undefined !== dis) &&
+                 (null !== dis)      &&
+                 ('string' !== typeof dis) ) {
+                throw new Error('invalid parameter');
+            }
+            return this.execConfig('style', prm, dis);
         } catch (e) {
             console.error(e.stack);
             throw e;
@@ -107,11 +117,12 @@ mf.effect.Border = class extends mf.Effect {
                 prm,
                 'all'
             );
-            if ( (undefined !== prm)       &&
-                 (true === this.isExecd()) && 
-                 (true === this.status()) ) {
-                this.execute(true);
-            } else if (undefined !== ret) {
+            //if ( (undefined !== prm)       &&
+            //     (true === this.isExecd()) && 
+            //     (true === this.status()) ) {
+            //    this.execute(true);
+            //}//} else 
+            if (undefined !== ret) {
                 return ('all' === ret) ? 'border-' : 'border-' + ret + '-';
             }
         } catch (e) {
@@ -128,20 +139,16 @@ mf.effect.Border = class extends mf.Effect {
      * @param val (undefined) call as getter
      * @return (string) css value of border type
      */
-    color (prm) {
+    color (prm, dis) {
         try {
-            prm = (null === prm) ? prm = [0,0,0] : prm;
-            let ret = this.member(
-                'color',
-                'Color',
-                (undefined === prm) ? prm : mf.func.getColor(prm)
-            );
-            if ( (undefined !== prm)       &&
-                 (true === this.isExecd()) &&
-                 (true === this.status()) ) {
-                this.execute(true);
+            if ( (undefined !== prm) && (null !== prm) ) {
+                prm = mf.func.getColor(prm);
             }
-            return ret;
+            if ( (undefined !== dis) && (null !== dis) ) {
+                dis = mf.func.getColor(dis)
+            }
+            
+            return this.execConfig('color', prm, dis);
         } catch (e) {
             console.error(e.stack);
             throw e;
