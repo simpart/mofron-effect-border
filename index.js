@@ -97,7 +97,7 @@ mf.effect.Border = class extends mf.Effect {
                 'color',
                 'string',
                 (undefined !== prm) ? mf.func.getColor(prm).toString() : prm,
-                'rgb(90.90.90)'
+                'rgb(90,90,90)'
             );
         } catch (e) {
             console.error(e.stack);

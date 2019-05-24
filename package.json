@@ -1,6 +1,6 @@
 {
   "name": "mofron-effect-border",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "border effect for mofron",
   "main": "index.js",
   "scripts": {
