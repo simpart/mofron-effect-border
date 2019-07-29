@@ -15,6 +15,9 @@ mf.effect.Border = class extends mf.Effect {
             this.name('Border');
             this.prmMap(['width', 'color']);
             
+            this.width("0.01rem");
+            this.color([90,90,90]);
+            
             this.prmOpt(po, p2);
         } catch (e) {
             console.error(e.stack);
@@ -26,9 +29,9 @@ mf.effect.Border = class extends mf.Effect {
         try {
             let set_style = {};
             let type = ('all' === this.type()) ? 'border-' : 'border-' + this.type() + '-';
-            set_style[type + 'width'] = this.width();
+            set_style[type + 'width'] = this.width().toString();
             set_style[type + 'style'] = this.style();
-            set_style[type + 'color'] = this.color();
+            set_style[type + 'color'] = this.color().toString();
             cmp.style(set_style);
         } catch (e) {
             console.error(e.stack);
@@ -43,7 +46,7 @@ mf.effect.Border = class extends mf.Effect {
      * @return (string) css value of border width
      */
     width (prm) {
-        try { return this.member('width', 'string', prm, '0.01rem'); } catch (e) {
+        try { return this.member('width', 'size', prm); } catch (e) {
             console.error(e.stack);
             throw e;
         }
@@ -93,12 +96,7 @@ mf.effect.Border = class extends mf.Effect {
      */
     color (prm) {
         try {
-            return this.member(
-                'color',
-                'string',
-                (undefined !== prm) ? mf.func.getColor(prm).toString() : prm,
-                'rgb(90,90,90)'
-            );
+            return this.member('color', 'color', prm);
         } catch (e) {
             console.error(e.stack);
             throw e;
