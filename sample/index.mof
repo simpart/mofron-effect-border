@@ -1,0 +1,4 @@
+<require>
+    <tag load="mofron-effect-border">Border</tag>
+</require>
+<div size=(1rem,1rem) effect=Border()></div>

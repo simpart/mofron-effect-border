@@ -1,37 +1,66 @@
 /**
  * @file mofron-effect-border/index.js
- * @author simpart
+ * @brief border effect for mofron
+ *        set border style to target component
+ * @license MIT
  */
-const mf = require('mofron');
-/**
- * @class mofron.effect.Border
- * @brief border style effect class
- */
-mf.effect.Border = class extends mf.Effect {
-    
-    constructor (po, p2) {
+module.exports = class extends mofron.class.Effect {
+    /**
+     * initialize effect
+     * 
+     * @param (mixed) width parameter
+     *                key-value: effect config
+     * @param (mixed) color parameter
+     * @short width,color
+     * @type private
+     */
+    constructor (p1, p2) {
         try {
             super();
             this.name('Border');
-            this.prmMap(['width', 'color']);
+            this.shortForm('width','color');
+	    
+	    /* init config */
+	    this.confmng().add('width', { type: 'size', init: "0.01rem" });
+            this.confmng().add(
+	        'style',
+	        {
+		    type: 'string', init: 'solid',
+                    select: ['none','hidden','solid','double','groove','ridge','inset','outset','dashed','dotted']
+		}
+            );
+            this.confmng().add(
+	        'position',
+		{
+		    type: 'string', init: 'all',
+                    select: ['all','top','bottom','left','right','top-left','top-right','bottom-left','bottom-right']
+		}
+            );
+            this.confmng().add('color', { type: 'color', init: [90,90,90] })
             
-            this.width("0.01rem");
-            this.color([90,90,90]);
-            
-            this.prmOpt(po, p2);
+            /* set config */
+            if (0 < arguments.length) {
+                this.config(p1, p2);
+	    }
         } catch (e) {
             console.error(e.stack);
             throw e;
         }
     }
     
+    /**
+     * effect config
+     * 
+     * @param (component) effect target component
+     * @type private
+     */
     contents (cmp) {
         try {
             let set_style = {};
-            let type = ('all' === this.type()) ? 'border-' : 'border-' + this.type() + '-';
-            set_style[type + 'width'] = this.width().toString();
-            set_style[type + 'style'] = this.style();
-            set_style[type + 'color'] = this.color().toString();
+            let pos = ('all' === this.position()) ? 'border-' : 'border-' + this.position() + '-';
+            set_style[pos + 'width'] = this.width().toString();
+            set_style[pos + 'style'] = this.style();
+            set_style[pos + 'color'] = this.color().toString();
             cmp.style(set_style);
         } catch (e) {
             console.error(e.stack);
@@ -40,13 +69,16 @@ mf.effect.Border = class extends mf.Effect {
     }
     
     /**
-     * setter/getter border width
+     * border width
      * 
-     * @param val (string) css value of border width
+     * @param (string) css value of border width
      * @return (string) css value of border width
+     * @type parameter
      */
     width (prm) {
-        try { return this.member('width', 'size', prm); } catch (e) {
+        try {
+	    return this.confmng('width', prm);
+	} catch (e) {
             console.error(e.stack);
             throw e;
         }
@@ -55,14 +87,14 @@ mf.effect.Border = class extends mf.Effect {
     /**
      * setter/getter border style
      *
-     * @param val (string) css value of border style
-     * @param val (undefined) call as getter
+     * @param (string) css value of border style (default is 'solid')
+     *                 ('none', 'hidden', 'solid', 'double', 'groove', 'ridge', 'inset', 'outset', 'dashed', 'dotted')
      * @return (string) css value of border style
+     * @type parameter
      */
     style (prm) {
         try {
-            let tmp = ['none', 'hidden', 'solid', 'double', 'groove', 'ridge', 'inset', 'outset', 'dashed', 'dotted'];
-            return this.member('style', tmp, prm, 'solid');
+            return this.confmng('style', prm);
         } catch (e) {
             console.error(e.stack);
             throw e;
@@ -70,17 +102,16 @@ mf.effect.Border = class extends mf.Effect {
     }
     
     /**
-     * setter/getter border type
+     * border position
      * 
-     * @param prm (string) border target position
-     *            ('all', 'top', 'bottom', 'left', 'right', 'top-left', 'top-right', 'bottom-left', 'bottom-right')
-     * @param val (undefined) call as getter
+     * @param (string) border target position (default is 'all')
+     *                 ('all', 'top', 'bottom', 'left', 'right', 'top-left', 'top-right', 'bottom-left', 'bottom-right')
      * @return (string) css value of border type
+     * @type parameter
      */
-    type (prm) {
+    position (prm) {
         try {
-            let tmp = ['all', 'top', 'bottom', 'left', 'right', 'top-left', 'top-right', 'bottom-left', 'bottom-right'];
-            return this.member('type', tmp, prm, 'all');
+            return this.confmng('position', prm);
         } catch (e) {
             console.error(e.stack);
             throw e;
@@ -88,20 +119,20 @@ mf.effect.Border = class extends mf.Effect {
     }
     
     /**
-     * setter/getter border color
+     * border color
      * 
-     * @param p1 (string) border color (color name, 'rgb(r,g,b)', '#HEX')
-     * @param p1 (array) border color ([r,g,b])
-     * @return (string) css value of border type
+     * @param (mixed (color)) string: color name, #hex
+     *                        array: [red, green, blue, (alpha)]
+     * @return (mixed (color)) border color
+     * @type parameter
      */
     color (prm) {
         try {
-            return this.member('color', 'color', prm);
+            return this.confmng('color', prm);
         } catch (e) {
             console.error(e.stack);
             throw e;
         }
     }
 }
-module.exports = mf.effect.Border;
 /* end of file */
