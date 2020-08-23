@@ -17,9 +17,23 @@ module.exports = class extends mofron.class.Effect {
     constructor (p1, p2) {
         try {
             super();
-            this.name('Border');
+            this.modname('Border');
             this.shortForm('width','color');
 	    
+	    this.transition([
+	        "border-width", "border-top-width", "border-bottom-width", "border-left-width",
+		"border-right-width", "border-top-left-width", "border-top-right-width",
+		"border-bottom-left-width", "border-bottom-right-width",
+                "border-color", "border-top-color", "border-bottom-color", "border-left-color",
+                "border-right-color", "border-top-left-color", "border-top-right-color",
+                "border-bottom-left-color", "border-bottom-right-color"
+            ]);
+            
+            let pos = ('all' === this.position()) ? 'border-' : 'border-' + this.position() + '-';
+            set_style[pos + 'width'] = this.width().toString();
+	                set_style[pos + 'style'] = this.style();
+			            set_style[pos + 'color'
+
 	    /* init config */
 	    this.confmng().add('width', { type: 'size', init: "0.01rem" });
             this.confmng().add(
