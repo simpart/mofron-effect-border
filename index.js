@@ -29,11 +29,6 @@ module.exports = class extends mofron.class.Effect {
                 "border-bottom-left-color", "border-bottom-right-color"
             ]);
             
-            let pos = ('all' === this.position()) ? 'border-' : 'border-' + this.position() + '-';
-            set_style[pos + 'width'] = this.width().toString();
-	                set_style[pos + 'style'] = this.style();
-			            set_style[pos + 'color'
-
 	    /* init config */
 	    this.confmng().add('width', { type: 'size', init: "0.01rem" });
             this.confmng().add(
